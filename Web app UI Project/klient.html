@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ostatnia Prosta - Panel Klienta</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col">
+
+    <!-- Nawigacja -->
+    <nav class="bg-slate-950 border-b border-slate-800 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-cross text-amber-500 text-2xl"></i>
+                <span class="text-xl font-serif tracking-wide text-amber-500 font-bold">Ostatnia Prosta</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <button onclick="switchView('wizard-view')" class="text-sm font-medium hover:text-amber-500 transition text-amber-500" id="nav-new">Nowe Zgłoszenie</button>
+                <button onclick="switchView('orders-view')" class="text-sm font-medium hover:text-amber-500 transition text-slate-400" id="nav-active">Moje Zlecenia</button>
+                <div class="h-4 w-px bg-slate-800"></div>
+                <span class="text-sm text-slate-400"><i class="fa-solid fa-user mr-2"></i>Jan Kowalski</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Główny Kontener Operacyjny -->
+    <main class="max-w-6xl mx-auto p-4 md:p-6 my-4 flex-1 w-full">
+        
+        <!-- WIDOK 1: KREATOR NOWEGO ZLECENIA (PROCES KROK PO KROKU) -->
+        <div id="wizard-view" class="space-y-6">
+            
+            <!-- Pasek Postępu -->
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 md:p-6 shadow-xl">
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-2 text-center text-xs">
+                    <div id="step-tab-1" class="p-3 bg-amber-500/10 border border-amber-500/30 text-amber-500 rounded-lg font-bold transition-all">
+                        <span class="block text-base mb-1">01</span>
+                        <span>Inicjacja & Typ</span>
+                    </div>
+                    <div id="step-tab-2" class="p-3 bg-slate-900 border border-slate-800 text-slate-500 rounded-lg transition-all">
+                        <span class="block text-base mb-1">02</span>
+                        <span>Akt Zgonu</span>
+                    </div>
+                    <div id="step-tab-3" class="p-3 bg-slate-900 border border-slate-800 text-slate-500 rounded-lg transition-all">
+                        <span class="block text-base mb-1">03</span>
+                        <span>Terminarz</span>
+                    </div>
+                    <div id="step-tab-4" class="p-3 bg-slate-900 border border-slate-800 text-slate-500 rounded-lg transition-all">
+                        <span class="block text-base mb-1">04</span>
+                        <span>Asortyment</span>
+                    </div>
+                    <div id="step-tab-5" class="p-3 bg-slate-900 border border-slate-800 text-slate-500 rounded-lg transition-all">
+                        <span class="block text-base mb-1">05</span>
+                        <span>E-Usługi</span>
+                    </div>
+                    <div id="step-tab-6" class="p-3 bg-slate-900 border border-slate-800 text-slate-500 rounded-lg transition-all">
+                        <span class="block text-base mb-1">06</span>
+                        <span>Podsumowanie</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Układ Dwukolumnowy Formularze / Podsumowanie boczne -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                
+                <!-- Lewa kolumna: Zawartość aktywnego kroku -->
+                <div class="lg:col-span-2 bg-slate-950 border border-slate-800 rounded-xl p-6 shadow-md min-h-[450px] flex flex-col justify-between">
+                    
+                    <!-- KROK 1: Inicjacja i forma pochówku -->
+                    <div id="step-content-1" class="space-y-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-500 mb-2">Rozpoczęcie Organizacji Ceremonii</h2>
+                            <p class="text-sm text-slate-400">Wprowadź podstawowe dane i określ formę pochówku, aby rozpocząć proces rezerwacji zasobów.</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Imię Zmarłego</label>
+                                <input type="text" id="deceased-name" value="Maria" class="w-full bg-slate-900 border border-slate-800 rounded p-2.5 text-sm focus:border-amber-500 outline-none">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Nazwisko Zmarłego</label>
+                                <input type="text" id="deceased-surname" value="Nowak" class="w-full bg-slate-900 border border-slate-800 rounded p-2.5 text-sm focus:border-amber-500 outline-none">
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Forma Pochówku</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div onclick="selectBurialType('Tradycyjny')" id="burial-trad" class="border-2 border-amber-500 bg-slate-900 p-4 rounded-xl cursor-pointer flex items-center space-x-4 transition">
+                                    <div class="bg-amber-500/10 p-3 rounded-lg text-amber-500"><i class="fa-solid fa-box text-xl"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-sm">Tradycyjny</h4>
+                                        <p class="text-xs text-slate-400 mt-0.5">Pochówek w trumnie na cmentarzu</p>
+                                    </div>
+                                </div>
+                                <div onclick="selectBurialType('Kremacja')" id="burial-crem" class="border border-slate-800 hover:border-slate-700 bg-slate-900 p-4 rounded-xl cursor-pointer flex items-center space-x-4 transition">
+                                    <div class="bg-slate-800 p-3 rounded-lg text-slate-400" id="crem-icon-box"><i class="fa-solid fa-fire text-xl"></i></div>
+                                    <div>
+                                        <h4 class="font-bold text-sm">Kremacja</h4>
+                                        <p class="text-xs text-slate-400 mt-0.5">Spopielenie i pochówek w urnie</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KROK 2: Weryfikacja Aktu Zgonu -->
+                    <div id="step-content-2" class="space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-500 mb-2">Weryfikacja Dokumentacji Medyczno-Urzędowej</h2>
+                            <p class="text-sm text-slate-400">Wgraj cyfrową kopię aktu zgonu. System dokona automatycznej walidacji poprawności danych w celu odblokowania dalszych kroków.</p>
+                        </div>
+                        
+                        <div class="border-2 border-dashed border-slate-700 hover:border-amber-500 rounded-xl p-8 text-center cursor-pointer transition bg-slate-900/40 relative" onclick="simulateOcr()">
+                            <input type="file" id="file-upload" class="hidden">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-slate-500 mb-3 block"></i>
+                            <p class="text-sm font-semibold">Kliknij tutaj, aby załadować plik aktu zgonu</p>
+                            <p class="text-xs text-slate-500 mt-1">Obsługiwane formaty: PDF, JPEG, PNG (Max 10MB)</p>
+                        </div>
+
+                        <!-- Panel stanu OCR -->
+                        <div id="ocr-status-panel" class="hidden p-4 rounded-lg border flex items-center space-x-4 text-sm">
+                            <!-- Dynamicznie zmieniane przez JS -->
+                        </div>
+                    </div>
+
+                    <!-- KROK 3: Rezerwacja Terminu i Harmonogram -->
+                    <div id="step-content-3" class="space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-500 mb-2">Wybór Terminu i Rezerwacja Infrastruktury</h2>
+                            <p class="text-sm text-slate-400">Wybierz preferowaną datę ceremonii. System automatycznie zweryfikuje dostępność kaplicy, floty pojazdów oraz personelu.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Data Ceremonii</label>
+                                <input type="date" id="ceremony-date" class="w-full bg-slate-900 border border-slate-800 rounded p-2.5 text-sm text-slate-100 outline-none focus:border-amber-500" onchange="checkAvailability()">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold uppercase tracking-wider text-slate-400">Godzina</label>
+                                <select id="ceremony-time" class="w-full bg-slate-900 border border-slate-800 rounded p-2.5 text-sm text-slate-100 outline-none focus:border-amber-500" onchange="checkAvailability()">
+                                    <option value="10:00">10:00</option>
+                                    <option value="12:00" selected>12:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="16:00">16:00</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="availability-result" class="p-4 bg-slate-900 border border-slate-800 rounded-lg space-y-3">
+                            <div class="flex items-center space-x-2 text-sm text-emerald-400">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>Kaplica i dom pogrzebowy są dostępne w wybranym terminie.</span>
+                            </div>
+                            <div class="flex items-center space-x-2 text-sm text-emerald-400">
+                                <i class="fa-solid fa-car-side"></i>
+                                <span>Własna flota logistyczna posiada wolne pojazdy specjalistyczne.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KROK 4: Zarządzanie Asortymentem -->
+                    <div id="step-content-4" class="space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-500 mb-2">Dobór Elementów Asortymentowych</h2>
+                            <p class="text-sm text-slate-400">Wybierz trumnę lub urnę oraz opcjonalne wyroby kamieniarskie. System na bieżąco monitoruje stany magazynowe.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="products-grid">
+                            <!-- Dynamiczne produkty w zależności od wyboru tradycyjny/kremacja -->
+                        </div>
+                    </div>
+
+                    <!-- KROK 5: Obsługa E-Usług (ZAKŁADKA ZAKTUALIZOWANA O WYBÓR MULTIMEDIÓW) -->
+                    <div id="step-content-5" class="space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-500 mb-2">Konfiguracja Usług Cyfrowych</h2>
+                            <p class="text-sm text-slate-400">Skonfiguruj nowoczesne kanały powiadomień oraz pamiątki multimedialne z pakietu „Wieczna Opowieść”.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- E-Nekrolog -->
+                            <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-start space-x-4 cursor-pointer" onclick="toggleEservice('nekrolog')">
+                                <input type="checkbox" id="chk-nekrolog" checked class="mt-1 accent-amber-500">
+                                <div>
+                                    <h4 class="font-bold text-sm">Interaktywny E-Nekrolog</h4>
+                                    <p class="text-xs text-slate-400 mt-1">System wygeneruje cyfrowe powiadomienie z mapą dojazdu do kaplicy i roześle je do wskazanej listy kontaktów rodziny.</p>
+                                </div>
+                            </div>
+
+                            <!-- Cyfrowe Epitafium Pamiątkowe -->
+                            <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+                                <div class="flex items-start space-x-4 cursor-pointer" onclick="toggleEservice('epitafium')">
+                                    <input type="checkbox" id="chk-epitafium" class="mt-1 accent-amber-500">
+                                    <div>
+                                        <h4 class="font-bold text-sm">Cyfrowe Epitafium Pamiątkowe</h4>
+                                        <p class="text-xs text-slate-400 mt-1">Dedykowana podstrona biograficzna z galerią wspomnień oraz unikalnym kodem QR przeznaczonym do umieszczenia na nagrobku.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Pod-panel zarządzania plikami epitafium (Widoczny gdy zaznaczone) -->
+                                <div id="epitafium-media-panel" class="hidden pl-8 pt-2 border-l border-slate-800 space-y-4">
+                                    <label class="text-xs font-semibold uppercase tracking-wider text-amber-500 block">Zarządzanie Plikami i Fotografiami Wspomnień</label>
+                                    
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <label class="flex items-center space-x-3 p-3 bg-slate-950 rounded border border-amber-500/30 cursor-pointer" onclick="toggleMediaTiming('now')">
+                                            <input type="radio" name="media-timing" id="media-timing-now" value="now" checked class="accent-amber-500">
+                                            <div class="text-xs">
+                                                <span class="font-semibold block text-slate-200">Dodaj pliki teraz</span>
+                                                <span class="text-slate-400">Prześlij zdjęcia i dokumenty biograficzne natychmiast.</span>
+                                            </div>
+                                        </label>
+
+                                        <label class="flex items-center space-x-3 p-3 bg-slate-950 rounded border border-slate-800 cursor-pointer" onclick="toggleMediaTiming('later')">
+                                            <input type="radio" name="media-timing" id="media-timing-later" value="later" class="accent-amber-500">
+                                            <div class="text-xs">
+                                                <span class="font-semibold block text-slate-200">Odłóż to na później</span>
+                                                <span class="text-slate-400">Dokończ konfigurację galerii w dowolnym momencie przed ceremonią.</span>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- Sekwencyjny uploader plików (Widoczny domyślnie przy opcji 'now') -->
+                                    <div id="media-upload-zone" class="border border-dashed border-slate-700 bg-slate-900/50 p-4 rounded-lg text-center cursor-pointer hover:border-amber-500 transition" onclick="simulateMediaUpload()">
+                                        <i class="fa-solid fa-images text-xl text-slate-500 mb-1 block"></i>
+                                        <span class="text-xs font-medium block text-slate-300">Wybierz pliki ze wspomnieniami (zdjęcia, teksty)</span>
+                                        <span id="uploaded-files-count" class="text-[11px] text-slate-500 block mt-1">Brak przesłanych plików</span>
+                                    </div>
+
+                                    <!-- Komunikat przy odłożeniu na później -->
+                                    <div id="media-postpone-msg" class="hidden p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-400 flex items-start space-x-2">
+                                        <i class="fa-solid fa-circle-info text-amber-500 mt-0.5"></i>
+                                        <span>Po sfinalizowaniu zamówienia otrzymasz na adres e-mail dedykowany, bezpieczny odnośnik do przesłania zdjęć i materiałów pamiątkowych w dogodnym momencie.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KROK 6: Obsługa Urzędowa i Finalizacja -->
+                    <div id="step-content-6" class="space-y-6 hidden">
+                        <div>
+                            <h2 class="text-xl font-bold text-amber-500 mb-2">Automatyzacja Formalności i Zasiłek ZUS</h2>
+                            <p class="text-sm text-slate-400">Ostatni krok pozwala na bezgotówkowe rozliczenie kosztów ceremonii w ramach zasiłku pogrzebowego.</p>
+                        </div>
+
+                        <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-4">
+                            <h4 class="font-bold text-sm text-slate-200">Wybór Metody Rozliczenia Finansowego</h4>
+                            
+                            <label class="flex items-center space-x-3 p-3 bg-slate-950 rounded border border-slate-800 cursor-pointer">
+                                <input type="radio" name="payment-method" value="zus" checked class="accent-amber-500">
+                                <div class="text-sm">
+                                    <span class="font-semibold block">Bezgotówkowo za pośrednictwem ZUS / KRUS</span>
+                                    <span class="text-xs text-slate-400">System automatycznie wygeneruje wniosek i cesję zasiłku pogrzebowego bezpośrednio do urzędu.</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center space-x-3 p-3 bg-slate-950 rounded border border-slate-800 cursor-pointer">
+                                <input type="radio" name="payment-method" value="standard" class="accent-amber-500">
+                                <div class="text-sm">
+                                    <span class="font-semibold block">Tradycyjna płatność / Faktura VAT</span>
+                                    <span class="text-xs text-slate-400">Opłata całości kwoty przelewem tradycyjnym lub kartą w placówce stacjonarnej.</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Przyciski Nawigacyjne Kreatora -->
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-800 mt-6">
+                        <button id="btn-prev" onclick="moveStep(-1)" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded text-sm disabled:opacity-30 transition cursor-pointer" disabled>
+                            <i class="fa-solid fa-arrow-left mr-2"></i>Wstecz
+                        </button>
+                        <button id="btn-next" onclick="moveStep(1)" class="px-5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded text-sm transition cursor-pointer">
+                            Dalej<i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Prawa kolumna: Koszyk dynamiczny i Blokada Zasobów -->
+                <div class="space-y-6">
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 shadow-md">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 pb-2 border-b border-slate-800">Bieżące Podsumowanie</h3>
+                        
+                        <!-- Blokada czasowa (Uaktywnia się od kroku 3) -->
+                        <div id="resource-lock-banner" class="hidden mb-4 bg-amber-500/10 border border-amber-500/30 p-3 rounded-lg flex items-center space-x-3 text-xs text-amber-400">
+                            <i class="fa-solid fa-hourglass-half text-base animate-pulse"></i>
+                            <span>Zasoby i termin zostały zablokowane. Czas na dokończenie rejestracji: <strong id="lock-timer">15:00</strong></span>
+                        </div>
+
+                        <div class="space-y-3 text-sm" id="summary-items">
+                            <div class="flex justify-between">
+                                <span class="text-slate-400">Usługa podstawowa:</span>
+                                <span id="summary-base-price">2800.00 PLN</span>
+                            </div>
+                            <div class="flex justify-between" id="summary-product-row">
+                                <span class="text-slate-400" id="summary-product-name">Trumna Dębowa</span>
+                                <span id="summary-product-price">3500.00 PLN</span>
+                            </div>
+                            <div class="flex justify-between text-emerald-400" id="summary-eservice-row">
+                                <span>Interaktywny E-Nekrolog:</span>
+                                <span>W cenie</span>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-800 my-4 pt-4 flex justify-between items-baseline">
+                            <span class="font-bold text-sm">Szacowany koszt:</span>
+                            <span class="text-xl font-bold text-amber-500 font-serif" id="summary-total">6300.00 PLN</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- WIDOK 2: LISTA I PANEL ZARZĄDZANIA AKTYWNYMI ZLECENIAMI (EDYCJA / ANULOWANIE) -->
+        <div id="orders-view" class="space-y-6 hidden">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 shadow-md">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b border-slate-800 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold">Moje Zlecenia w Systemie</h2>
+                        <p class="text-sm text-slate-400 mt-1">Przeglądaj status, edytuj szczegóły lub zarządzaj rezerwacjami.</p>
+                    </div>
+                </div>
+
+                <!-- Karta aktywnego zamówienia -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-slate-800/60">
+                        <div>
+                            <span class="bg-amber-500/10 text-amber-500 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-500/20">W WERYFIKACJI</span>
+                            <h3 class="font-mono font-bold text-slate-200 text-base mt-1">Zlecenie #OP-2026-991</h3>
+                        </div>
+                        <div class="text-sm text-slate-400 text-left sm:text-right">
+                            <span>Data zgłoszenia: 19.05.2026</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <span class="text-slate-500 block text-xs uppercase font-semibold">Osoba Zmarła</span>
+                            <span class="font-medium text-slate-200">śp. Maria Nowak</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block text-xs uppercase font-semibold">Ustalony Termin</span>
+                            <span class="font-medium text-slate-200" id="active-order-date">22.05.2026, godz. 12:00</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block text-xs uppercase font-semibold">Wybrany Konfiguracja</span>
+                            <span class="font-medium text-slate-200" id="active-order-config">Tradycyjny, Trumna Dębowa</span>
+                        </div>
+                    </div>
+
+                    <!-- Akcje modyfikacji i anulowania -->
+                    <div class="flex justify-end space-x-3 pt-3 border-t border-slate-800/60">
+                        <button onclick="editActiveOrder()" class="px-4 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 text-amber-500 font-semibold rounded text-xs transition cursor-pointer flex items-center space-x-2">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <span>Modyfikuj Szczegóły</span>
+                        </button>
+                        <button onclick="cancelActiveOrder()" class="px-4 py-2 bg-red-950/20 hover:bg-red-950/60 border border-red-900/40 text-red-400 font-semibold rounded text-xs transition cursor-pointer flex items-center space-x-2">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Anuluj Zamówienie</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Stopka systemowa -->
+    <footer class="bg-slate-950 border-t border-slate-800 p-4 text-center text-xs text-slate-500">
+        &copy; 2026 System Zarządzania Domem Pogrzebowym „Ostatnia Prosta”. Wszelkie prawa zastrzeżone.
+    </footer>
+
+    <!-- SKRYPTY LOGIKI INTERFEJSU SI -->
+    <script>
+        let currentStep = 1;
+        let selectedBurial = 'Tradycyjny';
+        let selectedProductPrice = 3500;
+        let selectedProductName = 'Trumna Dębowa';
+        let activeEservices = { nekrolog: true, epitafium: false };
+        let timerInstance = null;
+        let uploadedMediaCount = 0;
+
+        // Inicjalizacja produktów
+        const productsData = {
+            'Tradycyjny': [
+                { name: 'Trumna Dębowa Elegance', price: 3500, desc: 'Klasyczne lite drewno dębowe.' },
+                { name: 'Trumna Sosnowa Modern', price: 2200, desc: 'Jasne wykończenie matowe.' }
+            ],
+            'Kremacja': [
+                { name: 'Urna Granitowa Szafir', price: 1200, desc: 'Polerowany kamień naturalny.' },
+                { name: 'Urna Ceramiczna Klasyczna', price: 600, desc: 'Tradycyjne wypalana ceramika ozdobna.' }
+            ]
+        };
+
+        function switchView(viewId) {
+            document.getElementById('wizard-view').classList.add('hidden');
+            document.getElementById('orders-view').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+
+            document.getElementById('nav-new').classList.remove('text-amber-500');
+            document.getElementById('nav-active').classList.remove('text-amber-500');
+            if (viewId === 'wizard-view') document.getElementById('nav-new').classList.add('text-amber-500');
+            if (viewId === 'orders-view') document.getElementById('nav-active').classList.add('text-amber-500');
+        }
+
+        function selectBurialType(type) {
+            selectedBurial = type;
+            const tradBox = document.getElementById('burial-trad');
+            const cremBox = document.getElementById('burial-crem');
+
+            if (type === 'Tradycyjny') {
+                tradBox.className = "border-2 border-amber-500 bg-slate-900 p-4 rounded-xl cursor-pointer flex items-center space-x-4 transition";
+                cremBox.className = "border border-slate-800 hover:border-slate-700 bg-slate-900 p-4 rounded-xl cursor-pointer flex items-center space-x-4 transition";
+                selectedProductName = productsData['Tradycyjny'][0].name;
+                selectedProductPrice = productsData['Tradycyjny'][0].price;
+            } else {
+                cremBox.className = "border-2 border-amber-500 bg-slate-900 p-4 rounded-xl cursor-pointer flex items-center space-x-4 transition";
+                tradBox.className = "border border-slate-800 hover:border-slate-700 bg-slate-900 p-4 rounded-xl cursor-pointer flex items-center space-x-4 transition";
+                selectedProductName = productsData['Kremacja'][0].name;
+                selectedProductPrice = productsData['Kremacja'][0].price;
+            }
+            renderProducts();
+            recalculateTotal();
+        }
+
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            productsData[selectedBurial].forEach((prod, idx) => {
+                const isSelected = prod.name === selectedProductName;
+                const card = document.createElement('div');
+                card.className = `border ${isSelected ? 'border-amber-500' : 'border-slate-800 hover:border-slate-700'} bg-slate-900 p-4 rounded-lg relative cursor-pointer transition`;
+                card.onclick = () => {
+                    selectedProductName = prod.name;
+                    selectedProductPrice = prod.price;
+                    renderProducts();
+                    recalculateTotal();
+                };
+                card.innerHTML = `
+                    ${isSelected ? '<span class="absolute top-2 right-2 bg-amber-500 text-slate-950 text-[10px] font-bold px-1.5 py-0.5 rounded">WYBRANO</span>' : ''}
+                    <div class="h-24 bg-slate-800 rounded mb-2 flex items-center justify-center text-slate-500">
+                        <i class="fa-solid ${selectedBurial === 'Tradycyjny' ? 'fa-box' : 'fa-jar'} text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold text-sm">${prod.name}</h4>
+                    <p class="text-xs text-slate-400 mt-0.5">${prod.desc}</p>
+                    <p class="text-amber-500 font-bold text-sm mt-2">${prod.price.toFixed(2)} PLN</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function simulateOcr() {
+            const panel = document.getElementById('ocr-status-panel');
+            panel.classList.remove('hidden');
+            panel.className = "p-4 rounded-lg border flex items-center space-x-4 text-sm bg-slate-900 border-amber-500/30 text-amber-400";
+            panel.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-base"></i><span>Trwa uruchamianie algorytmu weryfikacji struktury dokumentu...</span>`;
+            
+            setTimeout(() => {
+                panel.className = "p-4 rounded-lg border flex items-center space-x-4 text-sm bg-emerald-950/30 border-emerald-800 text-emerald-400";
+                panel.innerHTML = `<i class="fa-solid fa-circle-check text-base"></i><div><strong>Dokument zweryfikowany pomyślnie.</strong> Dane strukturalne są czytelne i zostały zaimportowane.</div>`;
+            }, 2000);
+        }
+
+        function checkAvailability() {
+            const date = document.getElementById('ceremony-date').value;
+            const result = document.getElementById('availability-result');
+            if(date) {
+                result.innerHTML = `
+                    <div class="flex items-center space-x-2 text-sm text-emerald-400"><i class="fa-solid fa-circle-check"></i><span>Brak kolizji zasobów. Kaplica i termin zostały pomyślnie dopasowane.</span></div>
+                    <div class="flex items-center space-x-2 text-sm text-emerald-400"><i class="fa-solid fa-users"></i><span>Dostępny personel obsługowy został przypisany.</span></div>
+                `;
+            }
+        }
+
+        function toggleEservice(type) {
+            if (type === 'nekrolog' || type === 'epitafium') {
+                // Zapobieganie samoczynnemu przełączaniu przy kliknięciu w elementy wewnątrz kontenera epitafium
+                if (event.target.tagName === 'INPUT' && event.target.type === 'radio') return;
+                if (event.target.closest('#epitafium-media-panel') && event.target.tagName !== 'INPUT') return;
+                
+                activeEservices[type] = !activeEservices[type];
+                document.getElementById('chk-' + type).checked = activeEservices[type];
+                
+                // Pokaż/ukryj panel multimediów epitafium
+                const mediaPanel = document.getElementById('epitafium-media-panel');
+                if (activeEservices.epitafium) {
+                    mediaPanel.classList.remove('hidden');
+                } else {
+                    mediaPanel.classList.add('hidden');
+                }
+                
+                recalculateTotal();
+            }
+        }
+
+        function toggleMediaTiming(mode) {
+            const uploadZone = document.getElementById('media-upload-zone');
+            const postponeMsg = document.getElementById('media-postpone-msg');
+            const radNow = document.getElementById('media-timing-now');
+            const radLater = document.getElementById('media-timing-later');
+
+            // Aktualizacja stylów ramek dla zaznaczonego radio-buttona
+            radNow.closest('label').className = mode === 'now' ? 
+                "flex items-center space-x-3 p-3 bg-slate-950 rounded border border-amber-500/30 cursor-pointer" : 
+                "flex items-center space-x-3 p-3 bg-slate-950 rounded border border-slate-800 cursor-pointer";
+                
+            radLater.closest('label').className = mode === 'later' ? 
+                "flex items-center space-x-3 p-3 bg-slate-950 rounded border border-amber-500/30 cursor-pointer" : 
+                "flex items-center space-x-3 p-3 bg-slate-950 rounded border border-slate-800 cursor-pointer";
+
+            if (mode === 'now') {
+                uploadZone.classList.remove('hidden');
+                postponeMsg.classList.add('hidden');
+            } else {
+                uploadZone.classList.add('hidden');
+                postponeMsg.classList.remove('hidden');
+            }
+        }
+
+        function simulateMediaUpload() {
+            uploadedMediaCount += 2;
+            const statusLabel = document.getElementById('uploaded-files-count');
+            statusLabel.innerText = `Pomyślnie załadowano pliki (${uploadedMediaCount} szt.) - Galeria zaktualizowana`;
+            statusLabel.className = "text-[11px] text-emerald-400 block mt-1 font-semibold";
+        }
+
+        function recalculateTotal() {
+            let base = selectedBurial === 'Tradycyjny' ? 2800 : 2400;
+            let total = base + selectedProductPrice;
+            
+            document.getElementById('summary-base-price').innerText = base.toFixed(2) + " PLN";
+            document.getElementById('summary-product-name').innerText = selectedProductName;
+            document.getElementById('summary-product-price').innerText = selectedProductPrice.toFixed(2) + " PLN";
+            
+            const eserviceRow = document.getElementById('summary-eservice-row');
+            if (activeEservices.nekrolog || activeEservices.epitafium) {
+                eserviceRow.classList.remove('hidden');
+                let txt = [];
+                if(activeEservices.nekrolog) txt.push("E-Nekrolog");
+                if(activeEservices.epitafium) txt.push("Epitafium");
+                eserviceRow.innerHTML = `<span>${txt.join(" + ")}:</span><span>W cenie</span>`;
+            } else {
+                eserviceRow.classList.add('hidden');
+            }
+
+            document.getElementById('summary-total').innerText = total.toFixed(2) + " PLN";
+        }
+
+        function startTimer() {
+            if(timerInstance) clearInterval(timerInstance);
+            let duration = 15 * 60;
+            const display = document.getElementById('lock-timer');
+            timerInstance = setInterval(() => {
+                let minutes = Math.floor(duration / 60);
+                let seconds = duration % 60;
+                display.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                if (--duration < 0) {
+                    clearInterval(timerInstance);
+                    alert("Czas rezerwacji wygasł. Zasoby zostały zwolnione.");
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        function moveStep(direction) {
+            document.getElementById(`step-content-${currentStep}`).classList.add('hidden');
+            document.getElementById(`step-tab-${currentStep}`).className = "p-3 bg-slate-900 border border-slate-800 text-slate-400 rounded-lg text-center";
+            
+            currentStep += direction;
+            
+            document.getElementById(`step-content-${currentStep}`).classList.remove('hidden');
+            document.getElementById(`step-tab-${currentStep}`).className = "p-3 bg-amber-500/10 border border-amber-500/30 text-amber-500 rounded-lg font-bold text-center";
+
+            if(currentStep >= 3) {
+                document.getElementById('resource-lock-banner').classList.remove('hidden');
+                if(currentStep === 3 && direction > 0) startTimer();
+            } else {
+                document.getElementById('resource-lock-banner').classList.add('hidden');
+            }
+
+            document.getElementById('btn-prev').disabled = currentStep === 1;
+            if (currentStep === 6) {
+                document.getElementById('btn-next').innerHTML = `Finalizuj Zlecenie<i class="fa-solid fa-circle-check ml-2"></i>`;
+                document.getElementById('btn-next').onclick = submitOrder;
+            } else {
+                document.getElementById('btn-next').innerHTML = `Dalej<i class="fa-solid fa-arrow-right ml-2"></i>`;
+                document.getElementById('btn-next').onclick = () => moveStep(1);
+            }
+        }
+
+        function submitOrder() {
+            let infoMsg = "Zlecenie zostało pomyślnie zarejestrowane. Dokumenty i wnioski urzędowe zostały wygenerowane automatycznie.";
+            
+            // Jeśli użytkownik wybrał opcję odłożenia multimediów na później
+            if (activeEservices.epitafium && document.getElementById('media-timing-later').checked) {
+                infoMsg += "\n\nPrzypomnienie: Link aktywacyjny do uzupełnienia multimediów dla Cyfrowego Epitafium został wysłany na Twój e-mail.";
+            }
+            
+            alert(infoMsg);
+            
+            document.getElementById('active-order-config').innerText = `${selectedBurial}, ${selectedProductName}`;
+            const dateVal = document.getElementById('ceremony-date').value || '22.05.2026';
+            const timeVal = document.getElementById('ceremony-time').value;
+            document.getElementById('active-order-date').innerText = `${dateVal}, godz. ${timeVal}`;
+            
+            switchView('orders-view');
+        }
+
+        function editActiveOrder() {
+            alert("Uruchamianie trybu modyfikacji aktywnego zlecenia. System sprawdzi dostępność zmienionych terminów i asortymentu.");
+            switchView('wizard-view');
+        }
+
+        function cancelActiveOrder() {
+            if(confirm("Czy na pewno chcesz anulować to zlecenie? Wszystkie zarezerwowane zasoby (kaplica, flota, personel) zostaną natychmiast zwolnione w harmonogramie.")) {
+                alert("Zlecenie zostało anulowane. Zasoby zostały zwolnione pomyślnie.");
+                location.reload();
+            }
+        }
+
+        // Init
+        renderProducts();
+        recalculateTotal();
+        document.getElementById('ceremony-date').value = new Date(Date.now() + 3*24*60*60*1000).toISOString().split('T')[0];
+    </script>
+</body>
+</html>
