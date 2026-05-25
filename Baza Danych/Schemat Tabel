@@ -1,0 +1,97 @@
+OSOBY(
+    id_osoby PK,
+    imie,
+    nazwisko,
+    telefon,
+    email,
+    typ_osoby
+)
+
+ZLECENIODAWCY(
+    id_osoby PK, FK -> OSOBY.id_osoby,
+    adres_zamieszkania,
+    nr_dowodu
+)
+
+PRACOWNICY(
+    id_osoby PK, FK -> OSOBY.id_osoby,
+    stanowisko,
+    nr_licencji
+)
+
+ZMARLI(
+    id_zmarlego PK,
+    imie,
+    nazwisko,
+    pesel UK,
+    data_zgonu,
+    nr_aktu_zgonu UK
+)
+
+ZLECENIA(
+    id_zlecenia PK,
+    id_zleceniodawcy FK -> ZLECENIODAWCY.id_osoby,
+    id_zmarlego FK -> ZMARLI.id_zmarlego,
+    data_zgloszenia,
+    forma_pochowku,
+    status_zlecenia,
+    koszt_calkowity
+)
+
+ZASOBY_BAZA(
+    id_zasobu PK,
+    nazwa_zasobu,
+    typ_zasobu,
+    czy_aktywny
+)
+
+REZERWACJE_ZASOBOW(
+    id_rezerwacji PK,
+    id_zlecenia FK -> ZLECENIA.id_zlecenia,
+    id_zasobu FK -> ZASOBY_BAZA.id_zasobu,
+    id_pracownika_obslugi FK -> PRACOWNICY.id_osoby,
+    start_czas,
+    koniec_czas,
+    status_rezerwacji,
+    utworzono_o,
+    opis_celu
+)
+
+E_USLUGI(
+    id_e_uslugi PK,
+    id_zlecenia FK -> ZLECENIA.id_zlecenia,
+    typ,
+    tresc_biografii,
+    url_multimedia,
+    data_publikacji
+)
+
+ZALACZNIKI_E_USLUGI(
+    id_zalacznika PK,
+    id_e_uslugi FK -> E_USLUGI.id_e_uslugi,
+    url_pliku,
+    typ_pliku
+)
+
+DOKUMENTY_URZEDOWE(
+    id_dokumentu PK,
+    id_zlecenia FK -> ZLECENIA.id_zlecenia,
+    typ_dokumentu,
+    status_weryfikacji,
+    url_skanu
+)
+
+PRODUKTY(
+    kod_towaru PK,
+    nazwa,
+    cena_netto,
+    stan_magazynowy,
+    kategoria
+)
+
+POZYCJE_ZLECENIA_PRODUKTY(
+    id_pozycji PK,
+    id_zlecenia FK -> ZLECENIA.id_zlecenia,
+    kod_towaru FK -> PRODUKTY.kod_towaru,
+    ilosc
+)
