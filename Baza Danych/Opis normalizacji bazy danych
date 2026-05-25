@@ -1,0 +1,11 @@
+Projekt relacyjnej bazy danych został opracowany na podstawie konceptualnego diagramu klas systemu.
+
+Każda klasa UML została odwzorowana jako tabela relacyjna. Atrybuty klas zostały odwzorowane jako kolumny tabel, natomiast związki między klasami zrealizowano przy pomocy kluczy głównych PK i kluczy obcych FK.
+
+Relacje typu 1:N zostały odwzorowane przez umieszczenie klucza obcego po stronie „wiele”. Relacje typu N:M zostały rozbite na tabele pośrednie, np. ZLECENIA_PRODUKTY oraz CEREMONIE_ZASOBY.
+
+Schemat spełnia założenia trzeciej postaci normalnej:
+- każda tabela posiada klucz główny,
+- wartości pól są atomowe,
+- atrybuty niekluczowe zależą od całego klucza głównego,
+- usunięto zależności przechodnie poprzez wydzielenie osobnych tabel, np. URZEDY, CMENTARZE, PRODUKTY, ZASOBY.
