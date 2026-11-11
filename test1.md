@@ -4,7 +4,7 @@
 * **Nazwa zespołu:** Ostatnia Prosta Team (nazwa robocza)
 * **Skład:** Radzka Maria, Sęk Patryk (Informatyka Ogólna)
 * **Repozytorium GitHub:** [https://github.com/sekPatryk/Ostatnia_Prosta](https://github.com/sekPatryk/Ostatnia_Prosta)
-* **Przestrzeń LaboChat.com:** [Link do przestrzeni zespołu]
+* **Przestrzeń LaboChat.com:** [https://io-rs.labochat.com](https://io-rs.labochat.com)
 
 ## Idea i problem
 Współczesna branża usług pogrzebowych często opiera się na tradycyjnych, papierowych formularzach i nieprzejrzystych cennikach, co w trudnych momentach życiowych stanowi dodatkowe obciążenie dla klientów. Obecny sposób zarządzania rezerwacjami terminów ceremonii, wyborem akcesoriów oraz pamiątek cyfrowych jest nieskoordynowany. Nasz projekt – Ostatnia Prosta – rozwiązuje ten problem poprzez dostarczenie intuicyjnej platformy webowej. Umożliwia ona rodzinom zdalne zaplanowanie ceremonii, personalizację zamówienia (w tym unikalne usługi dodatkowe) oraz stały dostęp do cyfrowych epitafiów. Dzięki temu klienci zyskują pełną kontrolę, transparentność kosztów oraz oszczędność czasu w bezpiecznym, cyfrowym środowisku.
