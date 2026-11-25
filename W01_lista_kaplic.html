@@ -1,0 +1,78 @@
+{% extends "rezerwacje/baza.html" %}
+
+{% block title %}Lista kaplic – Ostatnia Prosta{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">Dostępność i harmonogram</p>
+    <h1 class="page-title">Lista kaplic</h1>
+    <p class="page-description">Sprawdź zajęte terminy i wybierz kaplicę odpowiednią do planowanej ceremonii.</p>
+</section>
+
+<section class="filter-panel" aria-label="Filtr dostępności">
+    <form class="filter-form" method="GET" action="{{ url_for('rezerwacje.lista_kaplic') }}">
+        <div class="form-field">
+            <label for="data">Wybierz datę</label>
+            <input type="date" id="data" name="data" value="{{ wybrana_data }}" required>
+        </div>
+        <button type="submit">Sprawdź dostępność</button>
+    </form>
+</section>
+
+<div class="section-heading-row">
+    <p class="eyebrow">Harmonogram na dzień</p>
+    <h2 class="section-title">{{ wybrana_data }}</h2>
+</div>
+
+{% if kaplice %}
+    <div class="kaplice-grid">
+        {% for kaplica in kaplice %}
+            {% set zajete = rezerwacje | selectattr("id_sali", "equalto", kaplica.id_sali) | list %}
+            <article class="kaplica-card">
+                <div class="kaplica-card__top">
+                    <div>
+                        <h3>{{ kaplica.nazwa }}</h3>
+                        <p class="kaplica-description">{{ kaplica.opis }}</p>
+                    </div>
+                    <span class="availability-label">
+                        <span class="availability-dot" aria-hidden="true"></span>
+                        {% if zajete %}Są rezerwacje{% else %}Brak rezerwacji{% endif %}
+                    </span>
+                </div>
+
+                <p class="capacity">Pojemność: <strong>{{ kaplica.pojemnosc }} osób</strong></p>
+
+                <div class="kaplica-schedule">
+                    <h4>Zajęte terminy</h4>
+                    {% if zajete %}
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr><th>Od</th><th>Do</th><th>Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in zajete %}
+                                        <tr>
+                                            <td>{{ r.godzina_od }}</td>
+                                            <td>{{ r.godzina_do }}</td>
+                                            <td><span class="status-pill">Zajęta</span></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="empty-note">Brak rezerwacji – kaplica jest wolna w wybranym dniu.</p>
+                    {% endif %}
+                </div>
+
+                <div class="kaplica-card__action">
+                    <a class="button" href="{{ url_for('rezerwacje.nowa_rezerwacja', id_sali=kaplica.id_sali, data=wybrana_data) }}">Zarezerwuj termin</a>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state"><p>Brak aktywnych kaplic w systemie.</p></div>
+{% endif %}
+{% endblock %}
